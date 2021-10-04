@@ -13,6 +13,7 @@ It is not well organized.
 
 * Open the info file in your text editor and replace the default region (na) with your region (i.e na,ap,eu,ko)
 * Open/Create "accounts.txt" and put your account details in the given format
+* Run nmchecker.py and you are done
 ```
 username;password
 username;password
