@@ -96,7 +96,7 @@ def main():
             entitle = getEntitle(token)
             puuid = getPuuid(entitle)
             price = getNight(puuid[0], puuid[1])
-            print(price)
+            print(acc[0],price)
 
 
 main()
