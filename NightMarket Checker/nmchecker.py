@@ -10,10 +10,10 @@ with open("info.gg", encoding='utf-8') as f:
     x = f.readline().rstrip("\n").split("=")
 region = str(x[1])
 
-sess = requests.Session()
-
 
 def getCookie():
+    global sess
+    sess = requests.Session()
     headers = {}
     headers['Content-Type'] = 'application/json'
     body = json.dumps({"client_id": "play-valorant-web-prod", "nonce": "1", "redirect_uri": "https://playvalorant.com/opt_in", "response_type": "token id_token"
@@ -23,13 +23,13 @@ def getCookie():
     return(response.json())
 
 
-def getToken():
+def getToken(username, password):
     headers = {}
     data = json.dumps({
         "type": "auth",
-        "username": "{username}",
-        "password": "{Password}",
-        "remember": True,
+        "username": username,
+        "password": password,
+        "remember": False,
         "language": "en_US"
     })
     headers['Content-Type'] = 'application/json'
@@ -87,9 +87,16 @@ def getSkinPrice(skinid, price):
     return (dict(zip(skin, price)))
 
 
-getCookie()
-token = getToken()
-entitle = getEntitle(token)
-puuid = getPuuid(entitle)
-price = getNight(puuid[0], puuid[1])
-print(price)
+def main():
+    with open("accounts.txt", encoding='utf-8') as f:
+        for i in f.readlines():
+            acc = i.rstrip("\n").split(";")
+            getCookie()
+            token = getToken(acc[0], acc[1])
+            entitle = getEntitle(token)
+            puuid = getPuuid(entitle)
+            price = getNight(puuid[0], puuid[1])
+            print(price)
+
+
+main()
