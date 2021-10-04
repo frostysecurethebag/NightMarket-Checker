@@ -24,4 +24,4 @@ username;password
 * Seperate accounts by new line
 
 
-
+* The output is displayed on the terminal and also saved in a .csv file
