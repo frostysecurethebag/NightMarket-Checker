@@ -2,6 +2,7 @@ import requests
 import json
 import re
 import urllib3
+import csv
 
 
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
@@ -9,6 +10,12 @@ urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 with open("info.gg", encoding='utf-8') as f:
     x = f.readline().rstrip("\n").split("=")
 region = str(x[1])
+
+with open("output.csv", 'a+', newline="\n") as f:
+    topcol = ['Account', 'Offer1', 'Offer2',
+              'Offer3', 'Offer4', 'Offer5', 'Offer6']
+    write = csv.writer(f)
+    write.writerow(topcol)
 
 
 def getCookie():
@@ -53,6 +60,7 @@ def getEntitle(token):
         "https://entitlements.auth.riotgames.com/api/token/v1", headers=headers)
     ggwp = response.json()
     headers['X-Riot-Entitlements-JWT'] = ggwp["entitlements_token"]
+
     return(headers)
 
 
@@ -60,6 +68,7 @@ def getPuuid(headers):
     response = sess.get("https://auth.riotgames.com/userinfo", headers=headers)
     ggwp = response.json()
     ggez = ggwp['sub']
+
     return ([ggez, headers])
 
 
@@ -74,29 +83,39 @@ def getNight(lola, headers):
 
     for i in ggwp['BonusStore']['BonusStoreOffers']:
         [skinid.append(k['ItemID']) for k in i['Offer']['Rewards']]
+
     return getSkinPrice(skinid, price)
 
 
 def getSkinPrice(skinid, price):
     skin = []
+    both = []
     for i in skinid:
         response = requests.get(
             f"https://valorant-api.com/v1/weapons/skinlevels/{i}")
         ggwp = response.json()
         skin.append(ggwp['data']['displayName'])
-    return (dict(zip(skin, price)))
+    print(dict(zip(skin, price)))
+    [both.append((str(skin[i])+":"+str(price[i]))) for i in range(len(skin))]
+
+    return (both)
 
 
 def main():
-    with open("accounts.txt", encoding='utf-8') as f:
-        for i in f.readlines():
-            acc = i.rstrip("\n").split(";")
-            getCookie()
-            token = getToken(acc[0], acc[1])
-            entitle = getEntitle(token)
-            puuid = getPuuid(entitle)
-            price = getNight(puuid[0], puuid[1])
-            print(acc[0],price)
+    with open("output.csv", 'a+', newline="\n") as csvfile:
+        with open("accounts.txt", encoding='utf-8') as f:
+            for i in f.readlines():
+                acc = i.rstrip("\n").split(";")
+                getCookie()
+                print(acc[0], end=" ")
+                token = getToken(acc[0], acc[1])
+                entitle = getEntitle(token)
+                puuid = getPuuid(entitle)
+                price = getNight(puuid[0], puuid[1])
+                price.insert(0, acc[0])
+                write = csv.writer(csvfile)
+                write.writerow(price)
+        write.writerow("\n")
 
 
 main()
