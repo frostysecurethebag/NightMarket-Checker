@@ -11,12 +11,6 @@ with open("info.gg", encoding='utf-8') as f:
     x = f.readline().rstrip("\n").split("=")
 region = str(x[1])
 
-with open("output.csv", 'a+', newline="\n") as f:
-    topcol = ['Account', 'Offer1', 'Offer2',
-              'Offer3', 'Offer4', 'Offer5', 'Offer6']
-    write = csv.writer(f)
-    write.writerow(topcol)
-
 
 def getCookie():
     global sess
@@ -72,11 +66,11 @@ def getPuuid(headers):
     return ([ggez, headers])
 
 
-def getNight(lola, headers):
+def getNight(puid, headers):
     price = []
     skinid = []
     response = sess.get("https://pd.{region}.a.pvp.net/store/v2/storefront/{puuid}".format(
-        puuid=lola, region=region), headers=headers, verify=False)
+        puuid=puid, region=region), headers=headers, verify=False)
     ggwp = response.json()
     for i in ggwp['BonusStore']['BonusStoreOffers']:
         [price.append(k) for k in i['DiscountCosts'].values()]
@@ -101,21 +95,34 @@ def getSkinPrice(skinid, price):
     return (both)
 
 
-def main():
+def csvWrite(all):
     with open("output.csv", 'a+', newline="\n") as csvfile:
-        with open("accounts.txt", encoding='utf-8') as f:
-            for i in f.readlines():
-                acc = i.rstrip("\n").split(";")
-                getCookie()
-                print(acc[0], end=" ")
-                token = getToken(acc[0], acc[1])
-                entitle = getEntitle(token)
-                puuid = getPuuid(entitle)
-                price = getNight(puuid[0], puuid[1])
-                price.insert(0, acc[0])
-                write = csv.writer(csvfile)
-                write.writerow(price)
+        write = csv.writer(csvfile)
+        topcol = ['Account', 'Offer1', 'Offer2',
+                  'Offer3', 'Offer4', 'Offer5', 'Offer6']
+        write.writerow(topcol)
+        for i in all:
+            write.writerow(i)
         write.writerow("\n")
+        print("-"*50)
+        print("Saved all accounts informations in output.csv")
+
+
+def main():
+    all = []
+    print("-"*150)
+    with open("accounts.txt", encoding='utf-8') as f:
+        for i in f.readlines():
+            acc = i.rstrip("\n").split(";")
+            getCookie()
+            print(acc[0], end=" ")
+            token = getToken(acc[0], acc[1])
+            entitle = getEntitle(token)
+            puuid = getPuuid(entitle)
+            price = getNight(puuid[0], puuid[1])
+            price.insert(0, acc[0])
+            all.append(price)
+    csvWrite(all)
 
 
 main()
