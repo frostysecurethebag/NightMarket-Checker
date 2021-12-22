@@ -125,4 +125,5 @@ def main():
     csvWrite(all)
 
 
-main()
+if __name__=="__main__":
+    main()
