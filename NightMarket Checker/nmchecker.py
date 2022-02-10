@@ -5,12 +5,6 @@ import urllib3
 import csv
 import cloudscraper
 
-sess = cloudscraper.CloudScraper(browser={
-    'browser': 'firefox',
-    'platform': 'windows',
-    'mobile': False
-})
-
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
 with open("info.gg", encoding='utf-8') as f:
@@ -20,7 +14,11 @@ region = str(x[1])
 
 def getCookie():
     global sess
-    # sess = scraper.Session()
+    sess = cloudscraper.CloudScraper(browser={
+        'browser': 'firefox',
+        'platform': 'windows',
+        'mobile': False
+    })
     headers = {}
     headers['Content-Type'] = 'application/json'
     body = json.dumps({"client_id": "play-valorant-web-prod", "nonce": "1", "redirect_uri": "https://playvalorant.com/opt_in", "response_type": "token id_token"
