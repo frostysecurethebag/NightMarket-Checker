@@ -3,7 +3,13 @@ import json
 import re
 import urllib3
 import csv
+import cloudscraper
 
+sess = cloudscraper.CloudScraper(browser={
+    'browser': 'firefox',
+    'platform': 'windows',
+    'mobile': False
+})
 
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
@@ -14,7 +20,7 @@ region = str(x[1])
 
 def getCookie():
     global sess
-    sess = requests.Session()
+    # sess = scraper.Session()
     headers = {}
     headers['Content-Type'] = 'application/json'
     body = json.dumps({"client_id": "play-valorant-web-prod", "nonce": "1", "redirect_uri": "https://playvalorant.com/opt_in", "response_type": "token id_token"
@@ -59,7 +65,8 @@ def getEntitle(token):
 
 
 def getPuuid(headers):
-    response = sess.get("https://auth.riotgames.com/userinfo", headers=headers)
+    response = sess.get(
+        "https://auth.riotgames.com/userinfo", headers=headers)
     ggwp = response.json()
     ggez = ggwp['sub']
 
@@ -70,7 +77,7 @@ def getNight(puid, headers):
     price = []
     skinid = []
     response = sess.get("https://pd.{region}.a.pvp.net/store/v2/storefront/{puuid}".format(
-        puuid=puid, region=region), headers=headers, verify=False)
+        puuid=puid, region=region), headers=headers)
     ggwp = response.json()
     for i in ggwp['BonusStore']['BonusStoreOffers']:
         [price.append(k) for k in i['DiscountCosts'].values()]
@@ -90,7 +97,8 @@ def getSkinPrice(skinid, price):
         ggwp = response.json()
         skin.append(ggwp['data']['displayName'])
     print(dict(zip(skin, price)))
-    [both.append((str(skin[i])+":"+str(price[i]))) for i in range(len(skin))]
+    [both.append((str(skin[i])+":"+str(price[i])))
+        for i in range(len(skin))]
 
     return (both)
 
@@ -125,5 +133,5 @@ def main():
     csvWrite(all)
 
 
-if __name__=="__main__":
+if __name__ == "__main__":
     main()
