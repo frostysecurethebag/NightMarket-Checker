@@ -106,7 +106,7 @@ class nmChecker:
         return (both)
 
     def csvWrite(self, all):
-        with open("output.csv", 'a+', newline="\n") as csvfile:
+        with open(path+"output.csv", 'a+', newline="\n") as csvfile:
             write = csv.writer(csvfile)
             write.writerows([all])
 
