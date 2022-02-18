@@ -8,12 +8,12 @@ threads = []
 path = "./NightMarket-Checker/NightMarketChecker/"
 
 
-# def colwrite():
-#     with open(path+"output.csv", 'a+', newline="\n") as csvfile:
-#         write = csv.writer(csvfile)
-#         topcol = ['Account', 'Offer1', 'Offer2',
-#                   'Offer3', 'Offer4', 'Offer5', 'Offer6']
-#         write.writerow(topcol)
+def colwrite():
+    with open(path+"output.csv", 'a+', newline="\n") as csvfile:
+        write = csv.writer(csvfile)
+        topcol = ['Account', 'Offer1', 'Offer2',
+                  'Offer3', 'Offer4', 'Offer5', 'Offer6']
+        write.writerow(topcol)
 
 
 def ani(delay=0.099):
@@ -37,6 +37,6 @@ def threadRun():
 
 
 if __name__ == "__main__":
-    #colwrite()
+    colwrite()
     threadRun()
     print("\nComplete info saved in output.csv")
