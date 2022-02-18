@@ -105,10 +105,10 @@ class nmChecker:
 
         return (both)
 
-    # def csvWrite(self, all):
-    #     with open("output.csv", 'a+', newline="\n") as csvfile:
-    #         write = csv.writer(csvfile)
-    #         write.writerows([all])
+    def csvWrite(self, all):
+        with open("output.csv", 'a+', newline="\n") as csvfile:
+            write = csv.writer(csvfile)
+            write.writerows([all])
 
     def loop(self, acc):
         price = [acc[0]]
@@ -118,4 +118,4 @@ class nmChecker:
         entitle = self.getEntitle(token)
         puuid = self.getPuuid(entitle)
         price = [acc[0]] + (self.getNight(puuid[0], puuid[1]))
-        # self.csvWrite(price)
+        self.csvWrite(price)
