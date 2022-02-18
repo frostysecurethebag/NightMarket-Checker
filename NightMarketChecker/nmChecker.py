@@ -4,13 +4,14 @@ import re
 import urllib3
 import csv
 import cloudscraper
+import os
 
 
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
-path = "./NightMarket-Checker/NightMarketChecker/"
+path = os.getcwd()
 
-with open(path+"info.gg", encoding='utf-8') as f:
+with open(path+"\\info.gg", encoding='utf-8') as f:
     x = f.readline().rstrip("\n").split("=")
 region = str(x[1])
 j = 0
@@ -106,7 +107,7 @@ class nmChecker:
         return (both)
 
     def csvWrite(self, all):
-        with open(path+"output.csv", 'a+', newline="\n") as csvfile:
+        with open(path+"\\output.csv", 'a+', newline="\n") as csvfile:
             write = csv.writer(csvfile)
             write.writerows([all])
 
