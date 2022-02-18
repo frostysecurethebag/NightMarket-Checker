@@ -22,6 +22,7 @@ username;password
 
 * Seperate username and password by using a single semicolon in-between(;)
 * Seperate accounts by new line
+* Run main.py
 
 
 * The output is displayed on the terminal and also saved in a .csv file
