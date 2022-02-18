@@ -29,6 +29,7 @@ def threadRun():
         for i in f.readlines():
             acc = i.rstrip("\n").split(";")
             t = threading.Thread(target=nmChecker().loop, args=(acc,))
+            t.daemon = True
             threads.append(t)
             t.start()
     ani()
