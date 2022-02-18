@@ -37,6 +37,6 @@ def threadRun():
 
 
 if __name__ == "__main__":
-    colwrite()
+    #colwrite()
     threadRun()
     print("\nComplete info saved in output.csv")
